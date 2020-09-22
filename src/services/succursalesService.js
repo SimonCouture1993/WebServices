@@ -6,3 +6,5 @@ class SuccursalesService {
         return await Succursale.findById(succursaleId);
     }
 }
+
+export default new SuccursalesService();

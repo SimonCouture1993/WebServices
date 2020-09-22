@@ -2,15 +2,15 @@ import mongoose from 'mongoose';
 
 const livreSchema = mongoose.Schema({
     categorie: String,
-    titre: String,
+    titre: {type:String, maxlength:300},
     prix: Number,
-    auteur: String,
-    sujet: String,
+    auteur: {type:String, maxlength:100},
+    sujet: {type:String, maxlength:100},
     ISBN: String,
     commentaires: [{
-        dateCommentaire: Date,
-        message: Text,
-        etoile: Number
+        dateCommentaire: {type:Date, default: Date.now},
+        message: {type:String, maxlength:300},
+        etoile: {type : Number, min : 0, max : 5}
     }] 
 
 }, {

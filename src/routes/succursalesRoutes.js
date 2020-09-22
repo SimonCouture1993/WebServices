@@ -17,7 +17,7 @@ class SuccursalesRoutes {
     }
 
     async getOne(req, res, next) {
-  
+        
         try {
             let succursale = await succursalesService.retrieveById(req.params.idSuccursale);
             succursale = succursale.toObject({ getter: false, virtual: true });
