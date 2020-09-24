@@ -13,8 +13,6 @@ class CategoriesRoutes {
     async getAll(req,res,next){
         try {
             let categories = await categorieService.retrieve();
-            console.log(categories);
-            //succursale = succursalesService.transform(succursale);
             res.status(200).json(categories);
         } catch (err) {
             return next(error.InternalServerError(err));

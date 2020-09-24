@@ -1,0 +1,51 @@
+import express from 'express';
+import error from 'http-errors';
+
+import livresService from '../services/livresService.js';
+
+const router = express.Router();
+
+class LivresRoutes {
+    constructor() {  
+        router.get('/', this.getAll); 
+        router.get('/:idLivre', this.getOne); 
+        router.put('/:idLivre', this.put); 
+    }
+
+    async getAll(req,res,next){
+
+    }
+
+    async getOne(req,res,next){
+        try {
+            let livres = await livresService.retrieveById(req.params.idLivre);
+            console.log(livres);
+            res.status(200).json(livres);
+        } catch (err) {
+            return next(error.InternalServerError(err));
+        }    
+    }
+
+    async put(req,res,next){
+        if (!req.body) {
+            return next(error.BadRequest());
+        } 
+
+        try {
+            let livre = await livresService.update(req.params.idLivre, req.body);
+
+            if (req.query._body === 'false') {
+                res.status(201).end();
+            } else {
+                livre = livre.toObject({ getter: false, virtual: true });
+                livre = livresService.transform(livre);
+                res.status(201).json(livre);
+            }
+        } catch (err) {
+            return next(error.InternalServerError(err));
+        }
+    }
+}
+
+new LivresRoutes();
+export default router;

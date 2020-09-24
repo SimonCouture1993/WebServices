@@ -2,6 +2,7 @@ import express from 'express';
 import database from './helpers/database.js';
 import errors from './helpers/errors.js';
 import categoriesRoutes from './routes/categoriesRoutes.js'
+import livresRoutes from './routes/livresRoutes.js'
 
 const app = express();
 
@@ -16,5 +17,6 @@ app.get('/', (req, res, next) => {
 });
 
 app.use('/categories', categoriesRoutes);
+app.use('/livres', livresRoutes);
 errors(app);
 export default app;
