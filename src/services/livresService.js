@@ -24,7 +24,7 @@ class LivresService {
         //Linking
         livre.href = `${process.env.BASE_URL}/livres/${livre._id}`;
         delete livre._id;
-        //delete livre.__v;
+        delete livre.__v;
         return livre;
     }
 }
