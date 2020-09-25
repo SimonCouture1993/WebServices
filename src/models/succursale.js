@@ -8,7 +8,7 @@ const succursaleSchema = mongoose.Schema({
     province: String,
     telephone: String,
     telecopieur: String,
-    information: Text
+    information: String
     
 }, {
     collection: 'succursales'

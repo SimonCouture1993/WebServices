@@ -1,5 +1,6 @@
 import express from 'express';
 import error from 'http-errors';
+import succursalesService from '../services/succursalesService.js';
 
 const router = express.Router();
 
@@ -7,13 +8,30 @@ class SuccursalesRoutes {
 
     constructor() {
 
-        //router.get('/', this.getAll); // GET = SELECT = RETRIEVE
+        router.get('/', this.getAll); // GET = SELECT = RETRIEVE
         router.get('/:idSuccursale', this.getOne);  // POST = INSERT = CREATE
         //router.post('/', this.post); // PATCH = UPDATE = UPDATE
         //router.put('/:idPlanet', this.put); // PUT = UPDATE = UPDATE
         //router.patch('/:idPlanet', this.patch); // DELETE = DELETE = DELETE
         //router.delete('/:idPlanet', this.delete);
 
+    }
+
+    async getAll(req,res,next){
+        try {
+            const succursales = await succursalesService.retrieve();
+
+            const tranformSuccursales = succursales.map(s => {
+                s = s.toObject({ getter: false, virtual: true });
+                s = succursalesService.transform(s);
+
+                return s;
+            });
+
+            res.status(200).json(tranformSuccursales);
+        } catch (err) {
+            return next(error.InternalServerError(err));
+        }    
     }
 
     async getOne(req, res, next) {
