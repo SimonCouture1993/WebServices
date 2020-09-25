@@ -1,8 +1,8 @@
 import Livre from '../models/livre.js';
 
 class CategoriesService {
-    async retrieve(){
-        return await Livre.distinct('categorie');
+     retrieve(){
+        return Livre.distinct('categorie');
     }
 }
 
