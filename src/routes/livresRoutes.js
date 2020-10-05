@@ -25,9 +25,20 @@ class LivresRoutes {
     }
 
     async getOne(req,res,next){
+        const transformOptions = { embed: {} };
+        const retrieveOptions = {}
+
+        if (req.query.embed === 'inventaires') {
+            retrieveOptions.inventaires = true;
+            transformOptions.embed.inventaires = true;
+        }
+
+
         try {
-            let livres = await livresService.retrieveById(req.params.idLivre);
-            res.status(200).json(livres);
+            let livre = await livresService.retrieveById(req.params.idLivre);
+            livre = livre.toObject({ getter: false, virtual: true });
+            livre = livresServices.transform(livre, transformOptions);
+            res.status(200).json(livre);
         } catch (err) {
             return next(error.InternalServerError(err));
         }    

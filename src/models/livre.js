@@ -17,4 +17,11 @@ const livreSchema = mongoose.Schema({
     collection: 'livres'
 });
 
+livreSchema.virtual('inventaires',{
+    ref:'Inventaire',
+    localDield:'_id',
+    foreignField:'livre',
+    justOne:false
+});
+
 export default mongoose.model('Livre', livreSchema);

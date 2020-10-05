@@ -11,7 +11,15 @@ class LivresService {
     }
     
     retrieveById(livreId) {
-        return Livre.findById(livreId);
+
+        const retrieveQuery = Livre.findById(livreId);
+
+        if (retrieveOptions.inventaires) {
+            console.log('test');
+            retrieveQuery.populate('inventaires');
+        }
+
+        return retrieveQuery;
     }
 
     async update(livreId, livre) {

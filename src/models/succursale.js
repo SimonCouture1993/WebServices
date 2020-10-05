@@ -14,4 +14,11 @@ const succursaleSchema = mongoose.Schema({
     collection: 'succursales'
 });
 
+succursaleSchema.virtual('inventaires',{
+    ref:'Inventaire',
+    localDield:'_id',
+    foreignField:'succursale',
+    justOne:false
+});
+
 export default mongoose.model('Succursale', succursaleSchema);
