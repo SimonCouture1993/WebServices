@@ -6,12 +6,12 @@ const inventaireSchema = mongoose.Schema({
     dateDerniereVente:{type:Date, default:Date.now},
     livre:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'inventaires',
+        ref:'Inventaire',
         required:true
     },
     succursale:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'succursales',
+        ref:'Succursale',
         required:true
     }
     

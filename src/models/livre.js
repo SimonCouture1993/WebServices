@@ -19,7 +19,7 @@ const livreSchema = mongoose.Schema({
 
 livreSchema.virtual('inventaires',{
     ref:'Inventaire',
-    localDield:'_id',
+    localField:'_id',
     foreignField:'livre',
     justOne:false
 });

@@ -26,18 +26,17 @@ class LivresRoutes {
 
     async getOne(req,res,next){
         const transformOptions = { embed: {} };
-        const retrieveOptions = {}
+        const retrieveOptions = {};
 
         if (req.query.embed === 'inventaires') {
-            retrieveOptions.inventaires = true;
-            transformOptions.embed.inventaires = true;
+            retrieveOptions.inventaire = true;
+            transformOptions.embed.inventaire = true;
         }
-
 
         try {
             let livre = await livresService.retrieveById(req.params.idLivre);
-            livre = livre.toObject({ getter: false, virtual: true });
-            livre = livresServices.transform(livre, transformOptions);
+            livre = livre.toObject({ getter: false, virtuals: true });
+            livre = livresService.transform(livre, transformOptions);
             res.status(200).json(livre);
         } catch (err) {
             return next(error.InternalServerError(err));
@@ -52,8 +51,6 @@ class LivresRoutes {
         try {
             let livre = await livresService.update(req.params.idLivre, req.body);
 
- 
-
             if (req.query._body === 'false') {
                 res.status(201).end();
             } else {
@@ -67,7 +64,6 @@ class LivresRoutes {
     }
 
     async post(req, res, next) {
-
         if (!req.body) {
             return next(error.BadRequest()); //Erreur 400, 415
         }
@@ -76,7 +72,7 @@ class LivresRoutes {
 
         try {
             let livreAdded = await livresService.create(req.body);
-            // livreAdded = livreAdded.toObject({ getter: false, virtual: true });
+            livreAdded = livreAdded.toObject({ getter: false, virtual: true });
             // livreAdded = livresService.transform(livreAdded);
 
             res.header('Location', livreAdded.href)

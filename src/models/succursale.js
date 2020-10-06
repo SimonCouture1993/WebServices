@@ -16,7 +16,7 @@ const succursaleSchema = mongoose.Schema({
 
 succursaleSchema.virtual('inventaires',{
     ref:'Inventaire',
-    localDield:'_id',
+    localField:'_id',
     foreignField:'succursale',
     justOne:false
 });
