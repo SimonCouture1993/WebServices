@@ -21,5 +21,5 @@ app.use('/categories', categoriesRoutes);
 app.use('/succursales', succursalesRoutes);
 app.use('/livres', livresRoutes);
 
-errors(app);
+app.use('*', errors);
 export default app;

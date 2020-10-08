@@ -12,8 +12,6 @@ class SuccursalesRoutes {
         router.get('/:idSuccursale', this.getOne);  
         router.post('/', this.post);                    // POST = INSERT = CREATE
         router.put('/:idSuccursale', this.put);         // PATCH = UPDATE = UPDATE
-        //router.patch('/:idPlanet', this.patch);       // PUT = UPDATE = UPDATE
-        //router.delete('/:idPlanet', this.delete);     // DELETE = DELETE = DELETE
 
     }
 

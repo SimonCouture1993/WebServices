@@ -11,6 +11,7 @@ class CategoriesRoutes {
     }
 
     async getAll(req,res,next){
+        
         try {
             let categories = await categorieService.retrieve();
             res.status(200).json(categories);

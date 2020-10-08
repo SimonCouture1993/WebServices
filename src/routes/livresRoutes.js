@@ -1,30 +1,91 @@
 import express from 'express';
 import error from 'http-errors';
-
+import paginate from 'express-paginate';
 import livresService from '../services/livresService.js';
 
 const router = express.Router();
 
 class LivresRoutes {
-    constructor() {  
-        router.get('/', this.getAll); 
+    constructor() {
+        router.get('/', paginate.middleware(20, 50), this.getAll);
         router.post('/', this.post); // PATCH = UPDATE = UPDATE
-        router.get('/:idLivre', this.getOne); 
-        router.put('/:idLivre', this.put); 
+        router.get('/:idLivre', this.getOne);
+        router.put('/:idLivre', this.put);
     }
 
-    async getAll(req,res,next){
+    async getAll(req, res, next) {
+        let categorie;
+
+        const transformOption = { embed: {} };
+
+        const retrieveOptions = {
+            limit: req.query.limit,
+            page: req.query.page,
+            skip: parseInt(req.query.skip, 10)
+        };
+
+        if (req.query.categorie) {
+            categorie = req.query.categorie;
+        }
+
         try {
-            let livres = await livresService.retrieve();
-            //succursale = succursalesService.transform(succursale);
-            res.status(200).json(livres);
-        } catch (err) {
-            return next(error.InternalServerError(err));
-        }    
 
+            let [livres, itemsCount] = await livresService.retrieveByCriteria({}, retrieveOptions);
+
+            const pageCount = Math.ceil(itemsCount / req.query.limit);
+            const hasNextPage = paginate.hasNextPages(req)(pageCount);
+            const pageArray = paginate.getArrayPages(req)(3, pageCount, req.query.page);
+
+            const transformLivres = livres.map(e => {
+
+                e = e.toObject({ getter: false, virtuals: true });
+                e = livresService.transform(e, retrieveOptions, transformOption);
+
+                return e;
+            });
+
+            const responseBody = {
+                _metadata: {
+                    hasNextPage: hasNextPage,
+                    page: req.query.page,
+                    limit: req.query.limit,
+                    totalPages: pageCount,
+                    totalDocument: itemsCount
+                },
+                _links: {
+                    prev: ``,
+                    self: ``,
+                    next: ``
+                },
+                results: transformLivres
+            };
+
+            if (pageCount === 1) {
+                delete responseBody._links.prev;
+                responseBody._links.self = `${process.env.BASE_URL}${pageArray[0].url}`;
+                delete responseBody._links.next;
+            } else {
+                if (req.query.page === 1) {
+                    delete responseBody._links.prev;
+                    responseBody._links.self = `${process.env.BASE_URL}${pageArray[0].url}`;
+                    responseBody._links.next = `${process.env.BASE_URL}${pageArray[1].url}`;
+                } else if (!hasNextPage) {
+                    responseBody._links.prev = `${process.env.BASE_URL}${pageArray[1].url}`;
+                    responseBody._links.self = `${process.env.BASE_URL}${pageArray[2].url}`;
+                    delete responseBody._links.next;
+                } else {
+                    responseBody._links.prev = `${process.env.BASE_URL}${pageArray[0].url}`;
+                    responseBody._links.self = `${process.env.BASE_URL}${pageArray[1].url}`;
+                    responseBody._links.next = `${process.env.BASE_URL}${pageArray[2].url}`;
+                }
+            }
+            res.status(200).json(responseBody);
+        } catch (err) {
+            return next(err);
+        }
     }
 
-    async getOne(req,res,next){
+    async getOne(req, res, next) {
         const transformOptions = { embed: {} };
         const retrieveOptions = {};
 
@@ -40,13 +101,13 @@ class LivresRoutes {
             res.status(200).json(livre);
         } catch (err) {
             return next(error.InternalServerError(err));
-        }    
+        }
     }
 
-    async put(req,res,next){
+    async put(req, res, next) {
         if (!req.body) {
             return next(error.BadRequest());
-        } 
+        }
 
         try {
             let livre = await livresService.update(req.params.idLivre, req.body);

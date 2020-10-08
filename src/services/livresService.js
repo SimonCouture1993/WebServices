@@ -2,8 +2,27 @@ import Inventaire from '../models/inventaire.js';
 import Livre from '../models/livre.js';
 
 class LivresService {
-    retrieve() {
-        return Livre.find();
+
+    retrieveByCriteria(filter, retrieveOptions) {
+
+        const limit = retrieveOptions.limit;
+        const skip = (retrieveOptions.page - 1) * limit + retrieveOptions.skip; // Ajout de la gestion du paramètre page
+
+        const retrieveQuery = Livre.find(filter, retrieveOptions.fields).limit(limit).skip(skip);
+        const countQuery = Livre.countDocuments(filter);
+
+        if (retrieveOptions.livre) {
+            retrieveQuery.populate('Livre');
+        }
+
+        //Promise all attend que les deux promesses(requêtes) soient terminées avant de compléter l'opération
+        return Promise.all([retrieveQuery, countQuery]);
+
+    }
+
+    retrieve(categorie) {
+        //SELECT * FROM Livres WHERE categorie = 'Romance'
+        return Livre.find({ categorie: categorie });
     }
 
     create(livre) {
@@ -27,11 +46,9 @@ class LivresService {
     }
 
     transform(livre, transformOptions = {}) {
+
         const inventaire = livre.inventaires;
-
         livre.href = `${process.env.BASE_URL}/livres/${livre._id}`;
-
-        //Pour embed=livre
         if (transformOptions.embed) {
             if (transformOptions.embed.inventaires) {
                 livre.inventaires = livre.inventaires.map(i => {
@@ -44,7 +61,16 @@ class LivresService {
                 });
             }
         }
+        delete livre._id;
+        delete livre.id;
+        delete livre.__v;
         
+        livre.commentaires = livre.commentaires.map(i => {
+            delete i._id;
+            delete i.id;
+            return i;
+        });
+
         return livre;
     }
 }
