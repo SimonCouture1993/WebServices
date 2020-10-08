@@ -28,22 +28,23 @@ class LivresService {
 
     transform(livre, transformOptions = {}) {
         const inventaire = livre.inventaires;
-        console.log(inventaire)
-        if (inventaire) {
-            livre.inventaires.href = `${process.env.BASE_URL}/inventaires/${inventaire._id}` ;
-        }
+
+        livre.href = `${process.env.BASE_URL}/livres/${livre._id}`;
 
         //Pour embed=livre
         if (transformOptions.embed) {
-            if (transformOptions.embed.inventaire) {
+            if (transformOptions.embed.inventaires) {
                 livre.inventaires = livre.inventaires.map(i => {
-                    i.href = `${process.env.BASE_URL}/inventaires/${inventaire._id}`;
+                    i.href = `${process.env.BASE_URL}/inventaires/${i._id}`;
                     i.livre = { href: livre.href };
+                    i.succursale = { href: `${process.env.BASE_URL}/inventaires/${i._id}` };
+                    delete i._id;
+                    delete i.id;
                     return i;
                 });
             }
         }
-        delete inventaire._id;
+        
         return livre;
     }
 }
