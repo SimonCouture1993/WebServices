@@ -10,13 +10,13 @@ class LivresService {
         return Livre.create(livre);
     }
 
-    retrieveById(livreId) {
+    retrieveById(livreId, retrieveOptions) {
 
         const retrieveQuery = Livre.findById(livreId);
+
         if (retrieveOptions.inventaires) {
             retrieveQuery.populate('inventaires');
         }
-
         return retrieveQuery;
     }
 
@@ -26,21 +26,24 @@ class LivresService {
         return Livre.findOne(filter);
     }
 
-    transform(inventaire, transformOptions = {}) {
-        const livre = inventaire.livre;
-
-        if (livre) {
-            inventaire.livre = { href: `${process.env.BASE_URL}/livres/${livre._id}` };
+    transform(livre, transformOptions = {}) {
+        const inventaire = livre.inventaires;
+        console.log(inventaire)
+        if (inventaire) {
+            livre.inventaires.href = `${process.env.BASE_URL}/inventaires/${inventaire._id}` ;
         }
 
         //Pour embed=livre
-        if (transformOption.embed.livre) {
-            inventaire.livre = livreService.transform(livre);
+        if (transformOptions.embed) {
+            if (transformOptions.embed.inventaire) {
+                livre.inventaires = livre.inventaires.map(i => {
+                    i.href = `${process.env.BASE_URL}/inventaires/${inventaire._id}`;
+                    i.livre = { href: livre.href };
+                    return i;
+                });
+            }
         }
-
-        inventaire.href = `${process.env.BASE_URL}/inventaires/${inventaire._id}`;
         delete inventaire._id;
-
         return livre;
     }
 }

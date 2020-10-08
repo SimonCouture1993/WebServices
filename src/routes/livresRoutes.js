@@ -29,12 +29,12 @@ class LivresRoutes {
         const retrieveOptions = {};
 
         if (req.query.embed === 'inventaires') {
-            retrieveOptions.inventaire = true;
-            transformOptions.embed.inventaire = true;
+            retrieveOptions.inventaires = true;
+            transformOptions.embed.inventaires = true;
         }
 
         try {
-            let livre = await livresService.retrieveById(req.params.idLivre);
+            let livre = await livresService.retrieveById(req.params.idLivre, retrieveOptions);
             livre = livre.toObject({ getter: false, virtuals: true });
             livre = livresService.transform(livre, transformOptions);
             res.status(200).json(livre);
