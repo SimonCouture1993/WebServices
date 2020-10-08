@@ -31,7 +31,7 @@ class LivresService {
 
     retrieveById(livreId, retrieveOptions) {
 
-        const retrieveQuery = Livre.findOne({_id:livreId},retrieveOptions.fields);
+        const retrieveQuery = Livre.findOne({ _id: livreId }, retrieveOptions.fields);
 
         if (retrieveOptions.inventaires) {
             retrieveQuery.populate('inventaires');
@@ -45,13 +45,12 @@ class LivresService {
         return Livre.findOne(filter);
     }
 
-    async addComment(livreId, commentaire)
-    {
-      const livre = await Livre.findById(livreId);
-      livre.commentaires.push(commentaire);
-      livre.save();
-      console.log(livre.commentaires);
-      return livre;
+    async addComment(livreId, commentaire) {
+        const livre = await Livre.findById(livreId);
+        livre.commentaires.push(commentaire);
+        livre.save();
+        console.log(livre.commentaires);
+        return livre;
     }
 
     transform(livre, transformOptions = {}) {
@@ -73,12 +72,15 @@ class LivresService {
         delete livre._id;
         delete livre.id;
         delete livre.__v;
-        
-        livre.commentaires = livre.commentaires.map(i => {
-            delete i._id;
-            delete i.id;
-            return i;
-        });
+
+        if (livre.commentaires) {
+            livre.commentaires = livre.commentaires.map(i => {
+                delete i._id;
+                delete i.id;
+                return i;
+            });
+        }
+
 
         return livre;
     }
