@@ -3,6 +3,8 @@ import error from 'http-errors';
 import paginate from 'express-paginate';
 import livresService from '../services/livresService.js';
 
+const FIELDS_REGEX = new RegExp('([^,]*)');
+
 const router = express.Router();
 
 class LivresRoutes {
@@ -11,6 +13,7 @@ class LivresRoutes {
         router.post('/', this.post); // PATCH = UPDATE = UPDATE
         router.get('/:idLivre', this.getOne);
         router.put('/:idLivre', this.put);
+        router.post('/:idLivre/commentaires', this.addComment);
     }
 
     async getAll(req, res, next) {
@@ -89,9 +92,24 @@ class LivresRoutes {
         const transformOptions = { embed: {} };
         const retrieveOptions = {};
 
+        // EMBED
         if (req.query.embed === 'inventaires') {
             retrieveOptions.inventaires = true;
             transformOptions.embed.inventaires = true;
+        }
+
+        // FIELDS
+        if(req.query.fields) { 
+            let fields = req.query.fields;
+            if(FIELDS_REGEX.test(fields)) {
+                fields = fields.replace(/,/g, ' ');
+                retrieveOptions.fields = fields;
+            } else {
+               return next(error.BadRequest()); 
+            }
+
+        } else {
+            //retrieveOptions.planet = true;
         }
 
         try {
@@ -100,8 +118,8 @@ class LivresRoutes {
             livre = livresService.transform(livre, transformOptions);
             res.status(200).json(livre);
         } catch (err) {
-            return next(error.InternalServerError(err));
-        }
+            return next(err);
+        }    
     }
 
     async put(req, res, next) {
@@ -115,12 +133,24 @@ class LivresRoutes {
             if (req.query._body === 'false') {
                 res.status(201).end();
             } else {
-                livre = livre.toObject({ getter: false, virtual: true });
+                livre = livre.toObject({ getter: false, virtuals: true });
                 livre = livresService.transform(livre);
                 res.status(201).json(livre);
             }
         } catch (err) {
-            return next(error.InternalServerError(err));
+            return next(err);
+        }
+    }
+
+    async addComment(req,res,next){
+        if (!req.body) {
+            return next(error.BadRequest());
+        } 
+        try {
+            let livre = await livresService.addComment(req.params.idLivre, req.body);
+            res.status(201).json(livre);
+        } catch (err) {
+            return next(err);
         }
     }
 
@@ -128,8 +158,6 @@ class LivresRoutes {
         if (!req.body) {
             return next(error.BadRequest()); //Erreur 400, 415
         }
-
-        //Validation à faire soit par mongoose ou par nous même
 
         try {
             let livreAdded = await livresService.create(req.body);
