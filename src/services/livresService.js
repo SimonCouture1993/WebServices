@@ -29,10 +29,11 @@ class LivresService {
         return Livre.create(livre);
     }
 
+    //==================================================================================
+    // retrieveById Retorouve un livre selon un id et des options
+    //==================================================================================
     retrieveById(livreId, retrieveOptions) {
-
         const retrieveQuery = Livre.findOne({ _id: livreId }, retrieveOptions.fields);
-
         if (retrieveOptions.inventaires) {
             retrieveQuery.populate('inventaires');
         }
@@ -53,8 +54,10 @@ class LivresService {
         return livre;
     }
 
+    //==================================================================================
+    // transform Tronsform un livre selon des options de transformation
+    //==================================================================================
     transform(livre, transformOptions = {}) {
-
         const inventaire = livre.inventaires;
         livre.href = `${process.env.BASE_URL}/livres/${livre._id}`;
         if (transformOptions.embed) {
@@ -80,8 +83,6 @@ class LivresService {
                 return i;
             });
         }
-
-
         return livre;
     }
 }

@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 
 export default app => {
-
     const url = process.env.DATABASE;
     console.log(url);
     console.log(`[MONGO] - Establish new connection with url: ${url}`);

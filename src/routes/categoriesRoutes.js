@@ -10,8 +10,10 @@ class CategoriesRoutes {
         router.get('/', this.getAll); 
     }
 
+    //==================================================================================
+    // getAll Sélection de toute les catégories existantes
+    //==================================================================================
     async getAll(req,res,next){
-        
         try {
             let categories = await categorieService.retrieve();
             res.status(200).json(categories);
