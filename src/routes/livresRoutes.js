@@ -140,7 +140,6 @@ class LivresRoutes {
                 res.status(201).json(livre);
             }
         } catch (err) {
-            console.log("yo");
             return next(err);
         }
     }
