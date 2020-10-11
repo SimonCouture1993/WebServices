@@ -121,13 +121,17 @@ class LivresRoutes {
         }    
     }
 
+    //==================================================================================
+    // put mise à jour partielle d'un livre
+    //==================================================================================
     async put(req, res, next) {
         if (!req.body) {
             return next(error.BadRequest());
         }
         try {
             let livre = await livresService.update(req.params.idLivre, req.body);
-
+            //let error = livre.validateSync();
+            //console.log(error);
             if (req.query._body === 'false') {
                 res.status(201).end();
             } else {
@@ -136,19 +140,22 @@ class LivresRoutes {
                 res.status(201).json(livre);
             }
         } catch (err) {
+            console.log("yo");
             return next(err);
         }
     }
 
+    //==================================================================================
+    // addComment mise à jour partielle d'un livre
+    //==================================================================================
     async addComment(req,res,next){
         if (!req.body) {
             return next(error.BadRequest());
         } 
         try {
             let livre = await livresService.addComment(req.params.idLivre, req.body);
-            console.log(livre);
             //TODO FINIR LE HEADER
-            res.header('Location', livre.commentaires);
+            //res.header('Location', livre.commentaires);
             res.status(201).json(livre);
         } catch (err) {
             return next(err);

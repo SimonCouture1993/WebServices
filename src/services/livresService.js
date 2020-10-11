@@ -42,15 +42,14 @@ class LivresService {
 
     async update(livreId, livre) {
         const filter = { _id: livreId };
-        await Livre.findOneAndUpdate(filter, livre);
-        return Livre.findOne(filter);
+            await Livre.findOneAndUpdate(filter, livre, {runValidators: true});
+            return Livre.findOne(filter);   
     }
 
     async addComment(livreId, commentaire) {
         const livre = await Livre.findById(livreId);
         livre.commentaires.push(commentaire);
         livre.save();
-        console.log(livre.commentaires);
         return livre;
     }
 
