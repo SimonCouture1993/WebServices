@@ -25,10 +25,11 @@ class LivresService {
         return Livre.create(livre);
     }
 
+    //==================================================================================
+    // retrieveById Retorouve un livre selon un id et des options
+    //==================================================================================
     retrieveById(livreId, retrieveOptions) {
-
         const retrieveQuery = Livre.findOne({ _id: livreId }, retrieveOptions.fields);
-
         if (retrieveOptions.inventaires) {
             retrieveQuery.populate('inventaires');
         }
@@ -37,20 +38,21 @@ class LivresService {
 
     async update(livreId, livre) {
         const filter = { _id: livreId };
-        await Livre.findOneAndUpdate(filter, livre);
-        return Livre.findOne(filter);
+            await Livre.findOneAndUpdate(filter, livre, {runValidators: true});
+            return Livre.findOne(filter);   
     }
 
     async addComment(livreId, commentaire) {
         const livre = await Livre.findById(livreId);
         livre.commentaires.push(commentaire);
         livre.save();
-        console.log(livre.commentaires);
         return livre;
     }
 
+    //==================================================================================
+    // transform Tronsform un livre selon des options de transformation
+    //==================================================================================
     transform(livre, transformOptions = {}) {
-
         const inventaire = livre.inventaires;
         livre.href = `${process.env.BASE_URL}/livres/${livre._id}`;
         if (transformOptions.embed) {
@@ -76,8 +78,6 @@ class LivresService {
                 return i;
             });
         }
-
-
         return livre;
     }
 }

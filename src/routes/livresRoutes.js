@@ -10,7 +10,7 @@ const router = express.Router();
 class LivresRoutes {
     constructor() {
         router.get('/', paginate.middleware(20, 50), this.getAll);
-        router.post('/', this.post); // PATCH = UPDATE = UPDATE
+        router.post('/', this.post);
         router.get('/:idLivre', this.getOne);
         router.put('/:idLivre', this.put);
         router.post('/:idLivre/commentaires', this.addComment);
@@ -89,17 +89,20 @@ class LivresRoutes {
         }
     }
 
+    //==================================================================================
+    // getOne Sélection d'un livre avec embed inventaires et fields
+    //==================================================================================
     async getOne(req, res, next) {
         const transformOptions = { embed: {} };
         const retrieveOptions = {};
 
-        // EMBED
+        // Section Embed
         if (req.query.embed === 'inventaires') {
             retrieveOptions.inventaires = true;
             transformOptions.embed.inventaires = true;
         }
 
-        // FIELDS
+        // Section Fields
         if(req.query.fields) { 
             let fields = req.query.fields;
             if(FIELDS_REGEX.test(fields)) {
@@ -108,11 +111,7 @@ class LivresRoutes {
             } else {
                return next(error.BadRequest()); 
             }
-
-        } else {
-            //retrieveOptions.planet = true;
         }
-
         try {
             let livre = await livresService.retrieveById(req.params.idLivre, retrieveOptions);
             livre = livre.toObject({ getter: false, virtuals: true });
@@ -123,14 +122,17 @@ class LivresRoutes {
         }    
     }
 
+    //==================================================================================
+    // put mise à jour partielle d'un livre
+    //==================================================================================
     async put(req, res, next) {
         if (!req.body) {
             return next(error.BadRequest());
         }
-
         try {
             let livre = await livresService.update(req.params.idLivre, req.body);
-
+            //let error = livre.validateSync();
+            //console.log(error);
             if (req.query._body === 'false') {
                 res.status(201).end();
             } else {
@@ -143,12 +145,17 @@ class LivresRoutes {
         }
     }
 
+    //==================================================================================
+    // addComment mise à jour partielle d'un livre
+    //==================================================================================
     async addComment(req,res,next){
         if (!req.body) {
             return next(error.BadRequest());
         } 
         try {
             let livre = await livresService.addComment(req.params.idLivre, req.body);
+            //TODO FINIR LE HEADER
+            //res.header('Location', livre.commentaires);
             res.status(201).json(livre);
         } catch (err) {
             return next(err);

@@ -5,7 +5,7 @@ export default (err, req, res, next) => {
 
     const error = {
         developerMessage: err.stack,
-        userMessage: err.message,
+        userMessage: err.message
     }
 
     if (httpErrors.isHttpError(err)) {
