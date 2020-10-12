@@ -20,20 +20,21 @@ class LivresRoutes {
         let categorie;
 
         const transformOption = { embed: {} };
+        const filter = {};
 
         const retrieveOptions = {
             limit: req.query.limit,
             page: req.query.page,
             skip: parseInt(req.query.skip, 10)
         };
-
+        // Recherche par catégorie
         if (req.query.categorie) {
-            categorie = req.query.categorie;
+            filter.categorie = req.query.categorie;  
         }
 
         try {
 
-            let [livres, itemsCount] = await livresService.retrieveByCriteria({}, retrieveOptions);
+            let [livres, itemsCount] = await livresService.retrieveByCriteria(filter, retrieveOptions);
 
             const pageCount = Math.ceil(itemsCount / req.query.limit);
             const hasNextPage = paginate.hasNextPages(req)(pageCount);
@@ -161,8 +162,8 @@ class LivresRoutes {
 
         try {
             let livreAdded = await livresService.create(req.body);
-            livreAdded = livreAdded.toObject({ getter: false, virtual: true });
-            // livreAdded = livresService.transform(livreAdded);
+            livreAdded = livreAdded.toObject({ getter: false, virtuals: true });
+            livreAdded = livresService.transform(livreAdded);
 
             res.header('Location', livreAdded.href)
 
