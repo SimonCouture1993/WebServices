@@ -6,8 +6,14 @@ class SuccursalesService {
         return Succursale.find();
     }
 
-    async retrieveById(succursaleId) {
-        return await Succursale.findById(succursaleId);
+    async retrieveById(succursaleId, retrieveOptions) {
+        // return await Succursale.findById(succursaleId);
+        const retrieveQuery = Succursale.findOne({ _id: succursaleId }, retrieveOptions.fields);
+
+        if (retrieveOptions.inventaires) {
+            retrieveQuery.populate('inventaires');
+        }
+        return retrieveQuery;
     }
 
     create(succursale) {
@@ -20,15 +26,28 @@ class SuccursalesService {
         return Succursale.findOne(filter);
     }
 
-    transform(succursale) {
+    transform(succursale, transformOptions = {}) {
 
-        //Linking
+        if (transformOptions.embed) {
+            if (transformOptions.embed.inventaires) {
+                succursale.inventaires = succursale.inventaires.map(i => {
+                    console.log(succursale.inventaires);
+                    i.href = `${process.env.BASE_URL}/inventaires/${i._id}`;
+                    i.livre = { href: `${process.env.BASE_URL}/livres/${i.livre._id}` };
+                    i.succursale = { href: `${process.env.BASE_URL}/succursales/${i.succursale._id}` };
+                    delete i._id;
+                    delete i.id;
+                    return i;
+                });
+            }
+        }
+
         succursale.href = `${process.env.BASE_URL}/succursales/${succursale._id}`;
-        
-
+        delete succursale._id;
+        delete succursale.__v;
+        delete succursale.id;
         return succursale;
     }
 }
-
 
 export default new SuccursalesService();

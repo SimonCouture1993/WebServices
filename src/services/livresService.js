@@ -20,10 +20,6 @@ class LivresService {
 
     }
 
-    retrieve(categorie) {
-        //SELECT * FROM Livres WHERE categorie = 'Romance'
-        return Livre.find({ categorie: categorie });
-    }
 
     create(livre) {
         return Livre.create(livre);
