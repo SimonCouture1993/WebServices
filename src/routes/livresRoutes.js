@@ -130,8 +130,6 @@ class LivresRoutes {
         }
         try {
             let livre = await livresService.update(req.params.idLivre, req.body);
-            //let error = livre.validateSync();
-            //console.log(error);
             if (req.query._body === 'false') {
                 res.status(201).end();
             } else {
@@ -153,9 +151,14 @@ class LivresRoutes {
         } 
         try {
             let livre = await livresService.addComment(req.params.idLivre, req.body);
+            livre = livresService.transform(livre);
             //TODO FINIR LE HEADER
-            //res.header('Location', livre.commentaires);
-            res.status(201).json(livre);
+            res.header('Location', livre.commentaires[livre.commentaires.length - 1].href);
+            if (req.query._body === 'false') {
+                res.status(201).end();
+            } else {
+                res.status(201).json(livre);
+            }
         } catch (err) {
             return next(err);
         }

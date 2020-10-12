@@ -42,13 +42,13 @@ class LivresService {
 
     async update(livreId, livre) {
         const filter = { _id: livreId };
-            await Livre.findOneAndUpdate(filter, livre, {runValidators: true});
-            return Livre.findOne(filter);   
+        await Livre.findOneAndUpdate(filter, livre, { runValidators: true });
+        return Livre.findOne(filter);
     }
 
     async addComment(livreId, commentaire) {
         const livre = await Livre.findById(livreId);
-        livre.commentaires.push(commentaire);
+        livre.commentaires.push(commentaire)
         livre.save();
         return livre;
     }
@@ -77,6 +77,7 @@ class LivresService {
 
         if (livre.commentaires) {
             livre.commentaires = livre.commentaires.map(i => {
+                i.href = `${process.env.BASE_URL}/commentaires/${i._id}`;
                 delete i._id;
                 delete i.id;
                 return i;

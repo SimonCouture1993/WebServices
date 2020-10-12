@@ -12,6 +12,8 @@ const livreSchema = mongoose.Schema({
         message: { type: String, maxlength: 300 },
         etoile: {
             type: Number,
+            min:1,
+            max:5,
             validate: {
                 validator: Number.isInteger,
                 message: '{VALUE} n\'est pas une valeur entière'
