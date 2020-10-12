@@ -14,6 +14,7 @@ class LivresRoutes {
         router.get('/:idLivre', this.getOne);
         router.put('/:idLivre', this.put);
         router.post('/:idLivre/commentaires', this.addComment);
+        //router.post('/:idLivre/commentaires/:idCommentaire', this.getComment);
     }
 
     async getAll(req, res, next) {
@@ -29,7 +30,7 @@ class LivresRoutes {
         };
         // Recherche par catégorie
         if (req.query.categorie) {
-            filter.categorie = req.query.categorie;  
+            filter.categorie = req.query.categorie;
         }
 
         try {
@@ -103,13 +104,13 @@ class LivresRoutes {
         }
 
         // Section Fields
-        if(req.query.fields) { 
+        if (req.query.fields) {
             let fields = req.query.fields;
-            if(FIELDS_REGEX.test(fields)) {
+            if (FIELDS_REGEX.test(fields)) {
                 fields = fields.replace(/,/g, ' ');
                 retrieveOptions.fields = fields;
             } else {
-               return next(error.BadRequest()); 
+                return next(error.BadRequest());
             }
         }
         try {
@@ -119,7 +120,7 @@ class LivresRoutes {
             res.status(200).json(livre);
         } catch (err) {
             return next(err);
-        }    
+        }
     }
 
     //==================================================================================
@@ -146,24 +147,38 @@ class LivresRoutes {
     //==================================================================================
     // addComment mise à jour partielle d'un livre
     //==================================================================================
-    async addComment(req,res,next){
+    async addComment(req, res, next) {
         if (!req.body) {
             return next(error.BadRequest());
-        } 
+        }
         try {
             let livre = await livresService.addComment(req.params.idLivre, req.body);
             livre = livresService.transform(livre);
             //TODO FINIR LE HEADER
-            res.header('Location', livre.commentaires[livre.commentaires.length - 1].href);
+            //res.header('Location', livre.commentaires[livre.commentaires.length - 1].href);
             if (req.query._body === 'false') {
                 res.status(201).end();
             } else {
-                res.status(201).json(livre);
+                res.status(201).json(livre.commentaires[livre.commentaires.length - 1]);
             }
         } catch (err) {
             return next(err);
         }
     }
+
+    //==================================================================================
+    // getComment avoir un commentaire
+    //==================================================================================
+    /*async getComment(req, res, next) {
+        try {
+            let commentaires = await livresService.retrieveCommentById(req.params.idCommentaire, retrieveOptions);
+            commentaires = commentaires.toObject({ getter: false, virtuals: true });
+            //commentaires = livresService.transform(commentaires, transformOptions);
+            res.status(200).json(livre);
+        } catch (err) {
+            return next(err);
+        }
+    }*/
 
     async post(req, res, next) {
         if (!req.body) {
