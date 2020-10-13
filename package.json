@@ -16,6 +16,7 @@
     "express": "^4.17.1",
     "express-paginate": "^1.0.2",
     "http-errors": "^1.8.0",
+    "isbn-validate": "^1.0.3",
     "mongoose": "^5.10.5"
   }
 }

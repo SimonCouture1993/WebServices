@@ -153,9 +153,9 @@ class LivresRoutes {
         }
         try {
             let livre = await livresService.addComment(req.params.idLivre, req.body);
+            livre = livre.toObject({ getter: false, virtuals: true });
             livre = livresService.transform(livre);
-            //TODO FINIR LE HEADER
-            //res.header('Location', livre.commentaires[livre.commentaires.length - 1].href);
+            res.header('Location', livre.commentaires[livre.commentaires.length - 1].href);
             if (req.query._body === 'false') {
                 res.status(201).end();
             } else {

@@ -70,18 +70,17 @@ class LivresService {
                     return i;
                 });
             }
-        }
-
+        } 
         if (livre.commentaires) {
             livre.commentaires = livre.commentaires.map(c => {
-                console.log("yo")
                 c.href = `${process.env.BASE_URL}/commentaires/${c._id}`;
+                console.log(c.href);
                 delete c._id;
                 delete c.id;
                 return c;
             });
         }
-
+        
         delete livre._id;
         delete livre.id;
         delete livre.__v;
