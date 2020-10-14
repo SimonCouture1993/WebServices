@@ -1,0 +1,330 @@
+{
+	"info": {
+		"_postman_id": "e0243500-5fe2-4925-ad04-67391ce46439",
+		"name": "YannickBray",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Toutes les catégories (Simon Couture)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5700/categories",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5700",
+					"path": [
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sélection d'un livre par id (Simon Couture)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5700/livres/5f6d374af1acea62cc3b2d33?embed=inventaires&fields=categorie,titre,prix,auteur",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5700",
+					"path": [
+						"livres",
+						"5f6d374af1acea62cc3b2d33"
+					],
+					"query": [
+						{
+							"key": "embed",
+							"value": "inventaires"
+						},
+						{
+							"key": "fields",
+							"value": "categorie,titre,prix,auteur"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Mise à jour partielle d’un livre (Simon Couture)",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"categorie\": \"Romance\",\r\n        \"titre\": \"Fifty shade of Grey\",\r\n        \"prix\": 29.99,\r\n        \"auteur\": \"Harley\",\r\n        \"sujet\": \"Erotic stuff\",\r\n        \"ISBN\": \"048665088X\",\r\n        \"commentaires\": [\r\n            {\r\n                \"dateCommentaire\": \"2022-05-08T00:00:00.000Z\",\r\n                \"message\": \"Super bon livre! Got horny reading it!\",\r\n                \"etoile\": 5\r\n            }\r\n        ]\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5700/livres/5f6a7e8f57a71b30bca5e16e?_body=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5700",
+					"path": [
+						"livres",
+						"5f6a7e8f57a71b30bca5e16e"
+					],
+					"query": [
+						{
+							"key": "_body",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ajout commentaire (Simon Couture)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"message\": \"Super bon!\",\r\n        \"etoile\": 5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5700/livres/5f6d374af1acea62cc3b2d33/commentaires",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5700",
+					"path": [
+						"livres",
+						"5f6d374af1acea62cc3b2d33",
+						"commentaires"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Toute les livres selon une catégorie (André Pinel)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5700/livres?categorie=Romance",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5700",
+					"path": [
+						"livres"
+					],
+					"query": [
+						{
+							"key": "categorie",
+							"value": "Romance"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ajout d'un livre (André Pinel)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"categorie\": \"Aventure\",\r\n    \"titre\": \"Jurassic Park\",\r\n    \"prix\": 21.95,\r\n    \"auteur\": \"Michael Crichton\",\r\n    \"sujet\": \"Dinosaure\",\r\n    \"ISBN\": \"048665088X\",\r\n    \"commentaires\": [\r\n        {\r\n            \"dateCommentaire\": \"2019-09-24T00:00:00.000Z\",\r\n            \"message\": \"Super bon livre! Sauvage!\",\r\n            \"etoile\": 4\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5700/livres",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5700",
+					"path": [
+						"livres"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sélection d'une succursale avec embed et fields (André Pinel)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5700/succursales/5f6d226fa3c7d57374eff6f5?embed=inventaires&fields=appelatif,adresse",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5700",
+					"path": [
+						"succursales",
+						"5f6d226fa3c7d57374eff6f5"
+					],
+					"query": [
+						{
+							"key": "embed",
+							"value": "inventaires"
+						},
+						{
+							"key": "fields",
+							"value": "appelatif,adresse"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ajout d'une succursale (Harley Lounsbury)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "335224a6-0fd0-46c2-8f79-b1f4d106c995",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"appelatif\": \"Indigo Laval\",\r\n    \"adresse\": \"200 Boul. quelque chose\",\r\n    \"ville\": \"Laval\",\r\n    \"codePostal\": \"A1A 1A1\",\r\n    \"province\": \"Québec\",\r\n    \"telephone\": \"514-555-5555\",\r\n    \"telecopieur\": \"514-123-4567\",\r\n    \"information\": \"Librairie à Laval, Québec\"\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5700/succursales/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5700",
+					"path": [
+						"succursales",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Mise à jour complète d'une succursale  (Harley Lounsbury)",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"appelatif\": \"Indigo Boisbriand\",\r\n    \"adresse\": \"3000 Curé-Labelle\",\r\n    \"ville\": \"Boisbriand\",\r\n    \"codePostal\": \"2L2L2L\",\r\n    \"province\": \"Québec\",\r\n    \"telephone\": \"514-444-5555\",\r\n    \"telecopieur\": \"514-123-4567\",\r\n    \"information\": \"Librairie à Boisbriand, Québec\",\r\n    \"href\": \"http://localhost:5700/succursales/5f8653bb9e2b27537836d2cf\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5700/succursales/5f86551014436e6450451bdd",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5700",
+					"path": [
+						"succursales",
+						"5f86551014436e6450451bdd"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Supression d'un livre  (Harley Lounsbury)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5700/livres/5f865e4c09b6eb3534f04daf",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5700",
+					"path": [
+						"livres",
+						"5f865e4c09b6eb3534f04daf"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Selection des inventaires d'un livre  (Harley Lounsbury)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5700/livres/5f6a7e8f57a71b30bca5e16e/inventaires",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5700",
+					"path": [
+						"livres",
+						"5f6a7e8f57a71b30bca5e16e",
+						"inventaires"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
