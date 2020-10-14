@@ -24,7 +24,7 @@ class SuccursalesRoutes {
     }
 
     //==================================================================================
-    // getAll Sélection de toutes les succursales 
+    // getAll : Sélection de toutes les succursales 
     //==================================================================================
     async getAll(req,res,next){
         const transformOptions = { embed: {} };
@@ -46,7 +46,7 @@ class SuccursalesRoutes {
     }
 
     //==================================================================================
-    // getOne Sélection d'une succursale avec les fonction Embed et Fields
+    // getOne : Sélection d'une succursale avec les fonctions Embed et Fields
     //==================================================================================
     async getOne(req, res, next) {
         const transformOptions = { embed: {} };
@@ -79,6 +79,9 @@ class SuccursalesRoutes {
         }
     }
 
+    //==================================================================================
+    // post : Ajout d'une succursale avec un HEADER
+    //==================================================================================
     async post(req, res, next) {
 
         if(!req.body) {
@@ -113,6 +116,9 @@ class SuccursalesRoutes {
         }
     }
 
+    //==================================================================================
+    // put : Modification d'une succursale.
+    //==================================================================================
     async put(req, res, next) {
 
         if (!req.body) {

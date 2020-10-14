@@ -9,14 +9,14 @@ import Succursale from '../models/succursale.js';
 class SuccursalesService {
 
     //==================================================================================
-    // retrieve Retrouve une succursale
+    // retrieve : Retrouve une succursale
     //==================================================================================
     retrieve() {
         return Succursale.find();
     }
 
     //==================================================================================
-    // retrieveById Retrouve une succursale selon son ID et des paramètres "fields"
+    // retrieveById : Retrouve une succursale selon son ID et des paramètres "fields"
     //==================================================================================
     async retrieveById(succursaleId, retrieveOptions) {
         // return await Succursale.findById(succursaleId);
@@ -39,7 +39,7 @@ class SuccursalesService {
     }
 
     //==================================================================================
-    // transform Transforme une succursale selon des options de transformation
+    // transform : Transforme une succursale selon des options de transformation
     //==================================================================================
     transform(succursale, transformOptions = {}) {
 

@@ -10,7 +10,7 @@ import Livre from '../models/livre.js';
 class LivresService {
 
     //==================================================================================
-    // retrieveByCritera Retrouve un livre selon une catégorie et des options du metadata
+    // retrieveByCritera : Retrouve un livre selon une catégorie et des options du metadata
     //==================================================================================
     retrieveByCriteria(filter, retrieveOptions) {
 
@@ -30,14 +30,14 @@ class LivresService {
     }
 
     //==================================================================================
-    // Creation d'un livre
+    // Création d'un livre
     //==================================================================================
     create(livre) {
         return Livre.create(livre);
     }
 
     //==================================================================================
-    // retrieveById Retrouve un livre selon un id et des options
+    // retrieveById : Retrouve un livre selon un id et des options
     //==================================================================================
     retrieveById(livreId, retrieveOptions) {
         const retrieveQuery = Livre.findOne({ _id: livreId }, retrieveOptions.fields);
@@ -48,7 +48,7 @@ class LivresService {
     }
 
     //=======================================================================================
-    // update Retrouve un livre selon un id et effectue la mise à jour selon le body envoyé
+    // update : Retrouve un livre selon un id et effectue la mise à jour selon le body envoyé
     //=======================================================================================
     async update(livreId, livre) {
         const filter = { _id: livreId };
@@ -67,10 +67,10 @@ class LivresService {
     }
 
     //==================================================================================
-    // transform Transforme un livre selon des options de transformation
+    // transform : Transforme un livre selon des options de transformation
     //==================================================================================
     transform(livre, transformOptions = {}) {
-        // Transformation du livre avec embed si besoin
+        // Transformation du livre avec Embed si besoin
         livre.href = `${process.env.BASE_URL}/livres/${livre._id}`;
         if (transformOptions.embed) {
             if (transformOptions.embed.inventaires) {
@@ -112,7 +112,7 @@ class LivresService {
     }
 
     //==================================================================================
-    // Selection des inventaires d'un livre.
+    // Sélection des inventaires d'un livre.
     //==================================================================================
     retrieveInventairesByLivre(livreId) {
 
@@ -122,7 +122,7 @@ class LivresService {
     }
 
     //==================================================================================
-    // Transform l'inventaire.
+    // Transforme l'inventaire.
     //==================================================================================
     transformInventaire(inventaire) {
 

@@ -17,7 +17,7 @@ class CategoriesRoutes {
     }
 
     //==================================================================================
-    // getAll Sélection de toute les catégories existantes
+    // getAll : Sélection de toutes les catégories existantes
     //==================================================================================
     async getAll(req,res,next){
         try {

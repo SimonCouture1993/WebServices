@@ -25,7 +25,7 @@ class LivresRoutes {
     }
 
     //==================================================================================
-    // getAll Sélection de tous les livre avec un metaData
+    // getAll : Sélection de tous les livre avec un metaData
     //==================================================================================
     async getAll(req, res, next) {
         let categorie;
@@ -100,7 +100,7 @@ class LivresRoutes {
     }
 
     //==================================================================================
-    // getOne Sélection d'un livre avec embed inventaires et fields
+    // getOne : Sélection d'un livre avec embed inventaires et fields
     //==================================================================================
     async getOne(req, res, next) {
         const transformOptions = { embed: {} };
@@ -133,7 +133,7 @@ class LivresRoutes {
     }
 
     //==================================================================================
-    // put mise à jour partielle d'un livre
+    // put : Mise à jour partielle d'un livre
     //==================================================================================
     async put(req, res, next) {
         if (!req.body) {
@@ -154,7 +154,7 @@ class LivresRoutes {
     }
 
     //==================================================================================
-    // addComment mise à jour partielle d'un livre
+    // addComment : Mise à jour partielle d'un livre
     //==================================================================================
     async addComment(req, res, next) {
         if (!req.body) {
@@ -228,7 +228,7 @@ class LivresRoutes {
     }
 
     //==================================================================================
-    // Selection des inventaires d'un livre
+    // Sélection des inventaires d'un livre
     //==================================================================================
     async getInventaires(req, res, next) {
         if (!req.body) {
