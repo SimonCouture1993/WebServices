@@ -14,7 +14,7 @@ class SuccursalesRoutes {
         router.get('/:idSuccursale', this.getOne);  
         router.post('/', this.post);                    // POST = INSERT = CREATE
         router.put('/:idSuccursale', this.put);         // PATCH = UPDATE = UPDATE
-
+       
     }
 
     async getAll(req,res,next){
@@ -73,7 +73,6 @@ class SuccursalesRoutes {
 
         try {
             let succursaleAjoute = await succursalesService.create(req.body);
-            console.log(succursaleAjoute);
             succursaleAjoute = succursaleAjoute.toObject({ getter: false, virtuals: true });
             succursaleAjoute = succursalesService.transform(succursaleAjoute);
 
@@ -107,7 +106,7 @@ class SuccursalesRoutes {
         }
 
         try {
-            let succursale = await succursalesService.update(req.params.idSuccurale, req.body);
+            let succursale = await succursalesService.update(req.params.idSuccursale, req.body)
             succursale =  succursale.toObject({ getter: false, virtuals: true});
             succursale = succursalesService.transform(succursale);
             
@@ -118,7 +117,7 @@ class SuccursalesRoutes {
             }
 
         } catch (error) {
-            return next(error.InternalServerError());
+            return next(error.InternalServerError(error));
         }
     }
 }

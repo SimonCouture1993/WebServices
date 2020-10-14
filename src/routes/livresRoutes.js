@@ -14,6 +14,8 @@ class LivresRoutes {
         router.get('/:idLivre', this.getOne);
         router.put('/:idLivre', this.put);
         router.post('/:idLivre/commentaires', this.addComment);
+        router.get('/:idLivre/inventaires', this.getInventaires);
+        router.delete('/:idLivre', this.delete);
         //router.post('/:idLivre/commentaires/:idCommentaire', this.getComment);
     }
 
@@ -208,6 +210,40 @@ class LivresRoutes {
             }
             return next(error.InternalServerError(err));
         }
+    }
+
+    delete(req, res, next) {
+        if (!req.body) {
+            return next(error.BadRequest()); //Erreur 400, 415
+        }
+
+        try {
+            livresService.delete(req.params.idLivre);
+            res.status(204).end();
+            
+        } catch (err) {
+            return next(err);
+        }
+    }
+
+    async getInventaires(req, res, next) {
+        if (!req.body) {
+            return next(error.BadRequest());
+        }
+
+        try {
+            let inventaires = await livresService.retrieveInventairesByLivre(req.params.idLivre);
+            
+            inventaires.forEach(inv => inv.toObject({ getter: false, virtuals: true }));
+
+            inventaires.forEach(inv => livresService.transformInventaire(inv));
+
+            res.status(200).json(inventaires);
+            
+        } catch (err) {
+            return next(err);
+        }
+       
     }
 }
 

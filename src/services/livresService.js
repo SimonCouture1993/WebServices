@@ -86,6 +86,26 @@ class LivresService {
         delete livre.__v;
         return livre;
     }
+
+    delete(livreId) {
+        Livre.findByIdAndDelete(livreId, function (err) { 
+            if (err){ 
+                console.log(err) 
+            } 
+        });
+    }
+
+   retrieveInventairesByLivre(livreId) { 
+
+        let inv = Inventaire.find({livre: livreId});
+        return inv;
+        
+    }
+
+    transformInventaire(inventaire) {
+        inventaire.livre = `${process.env.BASE_URL}/livres/${inventaire.livre}`;
+        
+    }
 }
 
 export default new LivresService();
