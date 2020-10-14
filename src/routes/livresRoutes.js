@@ -1,3 +1,9 @@
+/*
+livreRoutes.js
+2020-10-16
+Auteurs: Simon Couture, André Pinel, Harley Lounsbury
+*/
+
 import express from 'express';
 import error from 'http-errors';
 import paginate from 'express-paginate';
@@ -81,7 +87,7 @@ class LivresRoutes {
                     responseBody._links.prev = `${process.env.BASE_URL}${pageArray[1].url}`;
                     responseBody._links.self = `${process.env.BASE_URL}${pageArray[2].url}`;
                     delete responseBody._links.next;
-                } else {    
+                } else {
                     responseBody._links.prev = `${process.env.BASE_URL}${pageArray[0].url}`;
                     responseBody._links.self = `${process.env.BASE_URL}${pageArray[1].url}`;
                     responseBody._links.next = `${process.env.BASE_URL}${pageArray[2].url}`;
@@ -203,6 +209,10 @@ class LivresRoutes {
         }
     }
 
+
+    //==================================================================================
+    // Suppression d'un livre
+    //==================================================================================
     delete(req, res, next) {
         if (!req.body) {
             return next(error.BadRequest()); //Erreur 400, 415
@@ -211,12 +221,15 @@ class LivresRoutes {
         try {
             livresService.delete(req.params.idLivre);
             res.status(204).end();
-            
+
         } catch (err) {
             return next(err);
         }
     }
 
+    //==================================================================================
+    // Selection des inventaires d'un livre
+    //==================================================================================
     async getInventaires(req, res, next) {
         if (!req.body) {
             return next(error.BadRequest());
@@ -224,17 +237,18 @@ class LivresRoutes {
 
         try {
             let inventaires = await livresService.retrieveInventairesByLivre(req.params.idLivre);
-            
-            inventaires.forEach(inv => inv.toObject({ getter: false, virtuals: true }));
 
-            inventaires.forEach(inv => livresService.transformInventaire(inv));
+            inventaires = inventaires.map(i => {
+                i = i.toObject({ getter: false, virtuals: true });
+                i = livresService.transformInventaire(i);
+                return i;
+            });
 
             res.status(200).json(inventaires);
-            
+
         } catch (err) {
             return next(err);
         }
-       
     }
 }
 

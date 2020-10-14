@@ -1,3 +1,9 @@
+/*
+livre.js
+2020-10-16
+Auteurs: Simon Couture, André Pinel, Harley Lounsbury
+*/
+
 import mongoose from 'mongoose';
 import isbnValidate from 'isbn-validate';
 

@@ -1,3 +1,9 @@
+/*
+categorieRoutes.js
+2020-10-16
+Auteurs: Simon Couture, André Pinel, Harley Lounsbury
+*/
+
 import express from 'express';
 import error from 'http-errors';
 

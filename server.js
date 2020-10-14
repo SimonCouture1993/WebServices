@@ -1,3 +1,9 @@
+/*
+server.js
+2020-10-16
+Auteurs: Simon Couture, André Pinel, Harley Lounsbury
+*/
+
 import './env.js';
 
 import app from './src/app.js';

@@ -1,3 +1,9 @@
+/*
+succursalesService.js
+2020-10-16
+Auteurs: Simon Couture, André Pinel, Harley Lounsbury
+*/
+
 import Succursale from '../models/succursale.js';
 
 class SuccursalesService {

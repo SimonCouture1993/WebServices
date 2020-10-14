@@ -1,3 +1,9 @@
+/*
+livreServices.js
+2020-10-16
+Auteurs: Simon Couture, André Pinel, Harley Lounsbury
+*/
+
 import Inventaire from '../models/inventaire.js';
 import Livre from '../models/livre.js';
 
@@ -77,7 +83,7 @@ class LivresService {
                     return i;
                 });
             }
-        } 
+        }
         // Transformation des commentaires
         if (livre.commentaires) {
             livre.commentaires = livre.commentaires.map(c => {
@@ -87,31 +93,45 @@ class LivresService {
                 return c;
             });
         }
-        
+
         delete livre._id;
         delete livre.id;
         delete livre.__v;
         return livre;
     }
 
+    //==================================================================================
+    // Supprimer un livre
+    //==================================================================================
     delete(livreId) {
-        Livre.findByIdAndDelete(livreId, function (err) { 
-            if (err){ 
-                console.log(err) 
-            } 
+        Livre.findByIdAndDelete(livreId, function (err) {
+            if (err) {
+                console.log(err)
+            }
         });
     }
 
-   retrieveInventairesByLivre(livreId) { 
+    //==================================================================================
+    // Selection des inventaires d'un livre.
+    //==================================================================================
+    retrieveInventairesByLivre(livreId) {
 
-        let inv = Inventaire.find({livre: livreId});
+        let inv = Inventaire.find({ livre: livreId });
         return inv;
-        
+
     }
 
+    //==================================================================================
+    // Transform l'inventaire.
+    //==================================================================================
     transformInventaire(inventaire) {
+
         inventaire.livre = `${process.env.BASE_URL}/livres/${inventaire.livre}`;
-        
+        inventaire.succursale = `${process.env.BASE_URL}/succursales/${inventaire.succursale}`
+        delete inventaire._id;
+        delete inventaire.id;
+
+        return inventaire;
     }
 }
 

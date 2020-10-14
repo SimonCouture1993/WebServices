@@ -1,3 +1,9 @@
+/*
+succursale.js
+2020-10-16
+Auteurs: Simon Couture, André Pinel, Harley Lounsbury
+*/
+
 import mongoose from 'mongoose';
 
 const succursaleSchema = mongoose.Schema({

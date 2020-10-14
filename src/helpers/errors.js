@@ -1,3 +1,9 @@
+/*
+errors.js
+2020-10-16
+Auteurs: Simon Couture, André Pinel, Harley Lounsbury
+*/
+
 import mongoose from 'mongoose';
 import httpErrors from 'http-errors';
 

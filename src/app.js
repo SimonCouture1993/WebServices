@@ -1,3 +1,9 @@
+/*
+app.js
+2020-10-16
+Auteurs: Simon Couture, André Pinel, Harley Lounsbury
+*/
+
 import express from 'express';
 import database from './helpers/database.js';
 import errors from './helpers/errors.js';
