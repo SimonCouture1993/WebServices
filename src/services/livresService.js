@@ -3,6 +3,9 @@ import Livre from '../models/livre.js';
 
 class LivresService {
 
+    //==================================================================================
+    // retrieveByCritera Retrouve un livre selon une catégorie et des options du metadata
+    //==================================================================================
     retrieveByCriteria(filter, retrieveOptions) {
 
         const limit = retrieveOptions.limit;
@@ -20,12 +23,15 @@ class LivresService {
 
     }
 
+    //==================================================================================
+    // Creation d'un livre
+    //==================================================================================
     create(livre) {
         return Livre.create(livre);
     }
 
     //==================================================================================
-    // retrieveById Retorouve un livre selon un id et des options
+    // retrieveById Retrouve un livre selon un id et des options
     //==================================================================================
     retrieveById(livreId, retrieveOptions) {
         const retrieveQuery = Livre.findOne({ _id: livreId }, retrieveOptions.fields);
@@ -36,7 +42,7 @@ class LivresService {
     }
 
     //=======================================================================================
-    // update Retorouve un livre selon un id et effectue la mise à jour selon le body envoyé
+    // update Retrouve un livre selon un id et effectue la mise à jour selon le body envoyé
     //=======================================================================================
     async update(livreId, livre) {
         const filter = { _id: livreId };
@@ -55,7 +61,7 @@ class LivresService {
     }
 
     //==================================================================================
-    // transform Tronsform un livre selon des options de transformation
+    // transform Transforme un livre selon des options de transformation
     //==================================================================================
     transform(livre, transformOptions = {}) {
         // Transformation du livre avec embed si besoin
