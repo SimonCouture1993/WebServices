@@ -14,7 +14,6 @@ class LivresRoutes {
         router.get('/:idLivre', this.getOne);
         router.put('/:idLivre', this.put);
         router.post('/:idLivre/commentaires', this.addComment);
-        //router.post('/:idLivre/commentaires/:idCommentaire', this.getComment);
     }
 
     async getAll(req, res, next) {
@@ -34,7 +33,6 @@ class LivresRoutes {
         }
 
         try {
-
             let [livres, itemsCount] = await livresService.retrieveByCriteria(filter, retrieveOptions);
 
             const pageCount = Math.ceil(itemsCount / req.query.limit);
@@ -42,10 +40,8 @@ class LivresRoutes {
             const pageArray = paginate.getArrayPages(req)(3, pageCount, req.query.page);
 
             const transformLivres = livres.map(e => {
-
                 e = e.toObject({ getter: false, virtuals: true });
                 e = livresService.transform(e, retrieveOptions, transformOption);
-
                 return e;
             });
 
@@ -155,30 +151,16 @@ class LivresRoutes {
             let livre = await livresService.addComment(req.params.idLivre, req.body);
             livre = livre.toObject({ getter: false, virtuals: true });
             livre = livresService.transform(livre);
-            res.header('Location', livre.commentaires[livre.commentaires.length - 1].href);
+            res.header('Location', livre.commentaires[livre.commentaires.length - 1].href); // On met le dernier commentaire de la liste (celui le plus récent) dans le header
             if (req.query._body === 'false') {
                 res.status(201).end();
             } else {
-                res.status(201).json(livre.commentaires[livre.commentaires.length - 1]);
+                res.status(201).json(livre.commentaires[livre.commentaires.length - 1]); // On met le dernier commentaire de la liste (celui le plus récent) dans la réponse
             }
         } catch (err) {
             return next(err);
         }
     }
-
-    //==================================================================================
-    // getComment avoir un commentaire
-    //==================================================================================
-    /*async getComment(req, res, next) {
-        try {
-            let commentaires = await livresService.retrieveCommentById(req.params.idCommentaire, retrieveOptions);
-            commentaires = commentaires.toObject({ getter: false, virtuals: true });
-            //commentaires = livresService.transform(commentaires, transformOptions);
-            res.status(200).json(livre);
-        } catch (err) {
-            return next(err);
-        }
-    }*/
 
     async post(req, res, next) {
         if (!req.body) {
