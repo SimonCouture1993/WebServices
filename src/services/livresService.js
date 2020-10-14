@@ -3,6 +3,9 @@ import Livre from '../models/livre.js';
 
 class LivresService {
 
+    //==================================================================================
+    // retrieveByCritera Retrouve un livre selon une catégorie et des options du metadata
+    //==================================================================================
     retrieveByCriteria(filter, retrieveOptions) {
 
         const limit = retrieveOptions.limit;
@@ -20,13 +23,15 @@ class LivresService {
 
     }
 
-
+    //==================================================================================
+    // Creation d'un livre
+    //==================================================================================
     create(livre) {
         return Livre.create(livre);
     }
 
     //==================================================================================
-    // retrieveById Retorouve un livre selon un id et des options
+    // retrieveById Retrouve un livre selon un id et des options
     //==================================================================================
     retrieveById(livreId, retrieveOptions) {
         const retrieveQuery = Livre.findOne({ _id: livreId }, retrieveOptions.fields);
@@ -36,12 +41,18 @@ class LivresService {
         return retrieveQuery;
     }
 
+    //=======================================================================================
+    // update Retrouve un livre selon un id et effectue la mise à jour selon le body envoyé
+    //=======================================================================================
     async update(livreId, livre) {
         const filter = { _id: livreId };
         await Livre.findOneAndUpdate(filter, livre, { runValidators: true });
         return Livre.findOne(filter);
     }
 
+    //=======================================================================================
+    // Ajoute un commentaire sur un livre
+    //=======================================================================================
     async addComment(livreId, commentaire) {
         const livre = await Livre.findById(livreId);
         livre.commentaires.push(commentaire)
@@ -49,32 +60,28 @@ class LivresService {
         return livre;
     }
 
-    retrieveCommentById(commentaireId, retrieveOptions) {
-        const commentaire = Livre.commentaires.findById(commentaireId);
-        return commentaire;
-    }
-
     //==================================================================================
-    // transform Tronsform un livre selon des options de transformation
+    // transform Transforme un livre selon des options de transformation
     //==================================================================================
     transform(livre, transformOptions = {}) {
+        // Transformation du livre avec embed si besoin
         livre.href = `${process.env.BASE_URL}/livres/${livre._id}`;
         if (transformOptions.embed) {
             if (transformOptions.embed.inventaires) {
                 livre.inventaires = livre.inventaires.map(i => {
                     i.href = `${process.env.BASE_URL}/inventaires/${i._id}`;
                     i.livre = { href: livre.href };
-                    i.succursale = { href: `${process.env.BASE_URL}/inventaires/${i._id}` };
+                    i.succursale = { href: `${process.env.BASE_URL}/succursales/${i._id}` };
                     delete i._id;
                     delete i.id;
                     return i;
                 });
             }
         } 
+        // Transformation des commentaires
         if (livre.commentaires) {
             livre.commentaires = livre.commentaires.map(c => {
-                c.href = `${process.env.BASE_URL}/commentaires/${c._id}`;
-                console.log(c.href);
+                c.href = `${process.env.BASE_URL}/livres/${livre._id}/commentaires/${c._id}`;
                 delete c._id;
                 delete c.id;
                 return c;

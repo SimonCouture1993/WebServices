@@ -16,27 +16,30 @@ class LivresRoutes {
         router.post('/:idLivre/commentaires', this.addComment);
         router.get('/:idLivre/inventaires', this.getInventaires);
         router.delete('/:idLivre', this.delete);
-        //router.post('/:idLivre/commentaires/:idCommentaire', this.getComment);
     }
 
+    //==================================================================================
+    // getAll Sélection de tous les livre avec un metaData
+    //==================================================================================
     async getAll(req, res, next) {
         let categorie;
 
         const transformOption = { embed: {} };
         const filter = {};
 
+        //Options du metaData
         const retrieveOptions = {
             limit: req.query.limit,
             page: req.query.page,
             skip: parseInt(req.query.skip, 10)
         };
+
         // Recherche par catégorie
         if (req.query.categorie) {
             filter.categorie = req.query.categorie;
         }
 
         try {
-
             let [livres, itemsCount] = await livresService.retrieveByCriteria(filter, retrieveOptions);
 
             const pageCount = Math.ceil(itemsCount / req.query.limit);
@@ -44,13 +47,11 @@ class LivresRoutes {
             const pageArray = paginate.getArrayPages(req)(3, pageCount, req.query.page);
 
             const transformLivres = livres.map(e => {
-
                 e = e.toObject({ getter: false, virtuals: true });
                 e = livresService.transform(e, retrieveOptions, transformOption);
-
                 return e;
             });
-
+            // Construction de la metaData
             const responseBody = {
                 _metadata: {
                     hasNextPage: hasNextPage,
@@ -67,20 +68,20 @@ class LivresRoutes {
                 results: transformLivres
             };
 
-            if (pageCount === 1) {
+            if (pageCount === 1) { // S'il y a seulement une seule page.
                 delete responseBody._links.prev;
                 responseBody._links.self = `${process.env.BASE_URL}${pageArray[0].url}`;
                 delete responseBody._links.next;
             } else {
-                if (req.query.page === 1) {
+                if (req.query.page === 1) { // Affichage des liens pour la première page.
                     delete responseBody._links.prev;
                     responseBody._links.self = `${process.env.BASE_URL}${pageArray[0].url}`;
                     responseBody._links.next = `${process.env.BASE_URL}${pageArray[1].url}`;
-                } else if (!hasNextPage) {
+                } else if (!hasNextPage) { // Affichage des liens pour la dernière page.
                     responseBody._links.prev = `${process.env.BASE_URL}${pageArray[1].url}`;
                     responseBody._links.self = `${process.env.BASE_URL}${pageArray[2].url}`;
                     delete responseBody._links.next;
-                } else {
+                } else {    
                     responseBody._links.prev = `${process.env.BASE_URL}${pageArray[0].url}`;
                     responseBody._links.self = `${process.env.BASE_URL}${pageArray[1].url}`;
                     responseBody._links.next = `${process.env.BASE_URL}${pageArray[2].url}`;
@@ -157,11 +158,11 @@ class LivresRoutes {
             let livre = await livresService.addComment(req.params.idLivre, req.body);
             livre = livre.toObject({ getter: false, virtuals: true });
             livre = livresService.transform(livre);
-            res.header('Location', livre.commentaires[livre.commentaires.length - 1].href);
+            res.header('Location', livre.commentaires[livre.commentaires.length - 1].href); // On met le dernier commentaire de la liste (celui le plus récent) dans le header
             if (req.query._body === 'false') {
                 res.status(201).end();
             } else {
-                res.status(201).json(livre.commentaires[livre.commentaires.length - 1]);
+                res.status(201).json(livre.commentaires[livre.commentaires.length - 1]); // On met le dernier commentaire de la liste (celui le plus récent) dans la réponse
             }
         } catch (err) {
             return next(err);
@@ -169,19 +170,8 @@ class LivresRoutes {
     }
 
     //==================================================================================
-    // getComment avoir un commentaire
+    // Ajout d'un livre 
     //==================================================================================
-    /*async getComment(req, res, next) {
-        try {
-            let commentaires = await livresService.retrieveCommentById(req.params.idCommentaire, retrieveOptions);
-            commentaires = commentaires.toObject({ getter: false, virtuals: true });
-            //commentaires = livresService.transform(commentaires, transformOptions);
-            res.status(200).json(livre);
-        } catch (err) {
-            return next(err);
-        }
-    }*/
-
     async post(req, res, next) {
         if (!req.body) {
             return next(error.BadRequest()); //Erreur 400, 415
@@ -192,6 +182,7 @@ class LivresRoutes {
             livreAdded = livreAdded.toObject({ getter: false, virtuals: true });
             livreAdded = livresService.transform(livreAdded);
 
+            // HEADER location contenant l'URL du livre ajouté.
             res.header('Location', livreAdded.href)
 
             if (req.query._body === 'false') {
@@ -208,7 +199,7 @@ class LivresRoutes {
                         return next(error.Conflict(err)); //409
                 }
             }
-            return next(error.InternalServerError(err));
+            return next(err);
         }
     }
 

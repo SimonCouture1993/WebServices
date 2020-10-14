@@ -17,6 +17,9 @@ class SuccursalesRoutes {
        
     }
 
+    //==================================================================================
+    // getAll Sélection de toutes les succursales 
+    //==================================================================================
     async getAll(req,res,next){
         const transformOptions = { embed: {} };
         try {
@@ -36,15 +39,20 @@ class SuccursalesRoutes {
         }    
     }
 
+    //==================================================================================
+    // getOne Sélection d'une succursale avec les fonction Embed et Fields
+    //==================================================================================
     async getOne(req, res, next) {
         const transformOptions = { embed: {} };
         const retrieveOptions = {};
 
+        //EMBED
          if (req.query.embed === 'inventaires') {
             retrieveOptions.inventaires = true;
             transformOptions.embed.inventaires = true;
         }
 
+        //FIELDS
         if(req.query.fields) { 
             let fields = req.query.fields;
             if(FIELDS_REGEX.test(fields)) {
