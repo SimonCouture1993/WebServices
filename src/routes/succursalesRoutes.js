@@ -73,8 +73,9 @@ class SuccursalesRoutes {
 
         try {
             let succursaleAjoute = await succursalesService.create(req.body);
-            succursaleAjoute = succursaleAjoute.toObject({ getter: false, virtual: true });
-            succursaleAjoute = succursalesService.transform(planetAdded);
+            console.log(succursaleAjoute);
+            succursaleAjoute = succursaleAjoute.toObject({ getter: false, virtuals: true });
+            succursaleAjoute = succursalesService.transform(succursaleAjoute);
 
             res.header('Location', succursaleAjoute.href);
 
@@ -107,7 +108,7 @@ class SuccursalesRoutes {
 
         try {
             let succursale = await succursalesService.update(req.params.idSuccurale, req.body);
-            succursale =  succursale.toObject({ getter: false, virtual: true});
+            succursale =  succursale.toObject({ getter: false, virtuals: true});
             succursale = succursalesService.transform(succursale);
             
             if(req.query._body === 'false') {
