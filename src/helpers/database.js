@@ -18,7 +18,7 @@ export default app => {
 
     mongoose.connect(url).then(
         () => { console.log(`[MONGO] - Connected to: ${url}`); },
-        err => { /*TODO:*/ }
+        err => { }
     );
 }
 

@@ -19,7 +19,6 @@ class SuccursalesService {
     // retrieveById : Retrouve une succursale selon son ID et des paramètres "fields"
     //==================================================================================
     async retrieveById(succursaleId, retrieveOptions) {
-        // return await Succursale.findById(succursaleId);
         const retrieveQuery = Succursale.findOne({ _id: succursaleId }, retrieveOptions.fields);
 
         if (retrieveOptions.inventaires) {
@@ -46,7 +45,6 @@ class SuccursalesService {
         if (transformOptions.embed) {
             if (transformOptions.embed.inventaires) {
                 succursale.inventaires = succursale.inventaires.map(i => {
-                    console.log(succursale.inventaires);
                     i.href = `${process.env.BASE_URL}/inventaires/${i._id}`; // Lien URL pour trouver un inventaire.
                     i.livre = { href: `${process.env.BASE_URL}/livres/${i.livre._id}` }; // Lien URL pour trouver un livre.
                     i.succursale = { href: `${process.env.BASE_URL}/succursales/${i.succursale._id}` }; // Lien URL pour trouver une succursale.

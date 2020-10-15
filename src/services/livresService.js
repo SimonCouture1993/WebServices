@@ -104,11 +104,7 @@ class LivresService {
     // Supprimer un livre
     //==================================================================================
     delete(livreId) {
-        Livre.findByIdAndDelete(livreId, function (err) {
-            if (err) {
-                console.log(err)
-            }
-        });
+        Livre.findByIdAndDelete(livreId, function (err) {});
     }
 
     //==================================================================================
