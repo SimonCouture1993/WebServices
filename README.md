@@ -4,7 +4,7 @@ Harley Lounsbury 1063162 C
 
 Étapes à suivre pour la mise en marche:
 
-1. Installez node.js via ce lien: https://nodejs.org/en/
+1. Installez node.js et npm via ce lien: https://www.npmjs.com/get-npm
 2. Ouvrir le dossier dans visual code.
 3. Ouvrir un terminal. 
 4. Installez nodemon en mode globale avec la commande : npm install -g nodemon
